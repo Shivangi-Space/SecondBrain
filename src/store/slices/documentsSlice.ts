@@ -1,17 +1,17 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-
-interface Document {
-  id: string;
-  title: string;
-  status: 'pending' | 'processed' | 'error';
-}
+import type { Document } from '../../domain/entities/Document';
 
 interface DocumentsState {
   items: Document[];
-  loading: boolean;
+  isLoading: boolean;
+  error: string | null;
 }
 
-const initialState: DocumentsState = { items: [], loading: false };
+const initialState: DocumentsState = {
+  items: [],
+  isLoading: false,
+  error: null,
+};
 
 const documentsSlice = createSlice({
   name: 'documents',
@@ -21,10 +21,13 @@ const documentsSlice = createSlice({
       state.items.push(action.payload);
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
+      state.isLoading = action.payload;
+    },
+    setError: (state, action: PayloadAction<string | null>) => {
+      state.error = action.payload;
     },
   },
 });
 
-export const { addDocument, setLoading } = documentsSlice.actions;
+export const { addDocument, setLoading, setError } = documentsSlice.actions;
 export default documentsSlice.reducer;
